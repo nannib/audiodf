@@ -1,6 +1,8 @@
 # audiodf
 This program can detect if an audio message is a Deep Fake or it is genuine
 
+Funziona con versioni di Python >= 3.8
+
 1) pip install -r requirements.txt
 2) Mettere i file campione (minimo 1) *.wav nella stessa directory del file audiodf.py, i file campione sono le registrazioni di una stessa frase, fatte da un essere umano.
 3) Mettere il file generato dal voice cloning (Deep Fake), della stessa frase dei campioni audio e nominarlo test_audio.wav
