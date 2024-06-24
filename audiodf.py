@@ -13,17 +13,20 @@ from datetime import datetime
 
 def get_adaptive_n_fft(y):
     length = len(y)
-    # Trova la potenza di 2 più vicina inferiore o uguale alla lunghezza dell'input
     n_fft = 2**int(np.floor(np.log2(length)))
     return n_fft
 
+def normalize_audio(y):
+    max_amplitude = np.max(np.abs(y))
+    return y / max_amplitude
+
 def extract_features(audio_path, max_len=1000):
     y, sr = librosa.load(audio_path, sr=None, res_type='kaiser_fast')
+    y = normalize_audio(y)
     
     n_fft = get_adaptive_n_fft(y)
-    hop_length = n_fft // 2  # Imposta hop_length a metà di n_fft per una sovrapposizione del 50%
+    hop_length = n_fft // 2
     
-    # Trasformazione armonica per tonnetz
     y_harmonic = librosa.effects.harmonic(y)
     
     mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=100, n_fft=n_fft, hop_length=hop_length)
@@ -39,7 +42,6 @@ def extract_features(audio_path, max_len=1000):
     spectral_rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length)
     rmse = librosa.feature.rms(y=y, frame_length=n_fft, hop_length=hop_length)
     
-    # Uniformare la lunghezza delle caratteristiche
     def pad_features(feature, max_len):
         return librosa.util.fix_length(feature, size=max_len)
     
@@ -60,29 +62,24 @@ def extract_features(audio_path, max_len=1000):
     return features
 
 def main():
-    # Input da parte dell'utente per impostare la threshold
-    default_threshold = 0.51
-    threshold = input(f"Inserisci la threshold desiderata (default {default_threshold}): ")
+    default_threshold = 0.70
+    threshold = input(f"Inserisci la soglia di genuinità (default {default_threshold}): ")
     if threshold == '':
         threshold = default_threshold
     else:
         threshold = float(threshold)
     
-    # Directory corrente
     current_dir = os.getcwd()
     test_audio_path = os.path.join(current_dir, 'test_audio.wav')
     
-    # Lista dei file .wav nella directory
     wav_files = [f for f in os.listdir(current_dir) if f.endswith('.wav') and f != 'test_audio.wav']
     
     if not wav_files:
         print("Non ci sono file .wav nella directory corrente.")
         return
     
-    # Etichette delle caratteristiche
     feature_labels = ['mfccs', 'chroma_stft', 'chroma_cqt', 'chroma_cens', 'mel', 'contrast', 'tonnetz', 'zcr', 'spectral_centroid', 'spectral_bandwidth', 'spectral_rolloff', 'rmse']
     
-    # Estrazione delle caratteristiche dai file reali
     real_features = []
     for wav_file in wav_files:
         file_path = os.path.join(current_dir, wav_file)
@@ -91,14 +88,11 @@ def main():
     
     real_features = np.array(real_features)
     
-    # Estrazione delle caratteristiche dal file test_audio.wav
     test_features = extract_features(test_audio_path).reshape(1, -1)
     
-    # Calcolo della similarità
     similarity_scores = cosine_similarity(real_features, test_features)
     average_similarity = np.mean(similarity_scores)
     
-    # Determinazione della verosimiglianza
     is_fake = average_similarity < threshold
     verosimiglianza = (1 - average_similarity) * 100
     
@@ -107,7 +101,6 @@ def main():
     print(f"Il file 'test_audio.wav' è probabilmente un deep fake? {'Sì perchè < di' if is_fake else 'No, perchè > di'} soglia impostata: {threshold * 100:.2f}% ")
     print(f"Percentuale di verosimiglianza che 'test_audio.wav' sia un deep fake: {verosimiglianza:.2f}% - {100 - threshold * 100:.2f}% (valore soglia)")
     
-    # Input da parte dell'utente per generare il report XLSX e TXT
     generate_report = input("Desideri generare il report XLSX e un file di testo TXT con le informazioni? (Sì/No): ").lower()
     if generate_report == 'si' or generate_report == 'sì':
         export_feature_comparison(real_features, test_features, feature_labels, threshold, average_similarity, is_fake, verosimiglianza)
@@ -119,7 +112,6 @@ def export_feature_comparison(real_features, test_features, feature_labels, thre
     num_features = len(mean_real_features)
     chunk_size = num_features // len(feature_labels)
     
-    # Preparazione dei dati per l'export
     data = {}
     for i, label in enumerate(feature_labels):
         start_idx = i * chunk_size
@@ -127,19 +119,15 @@ def export_feature_comparison(real_features, test_features, feature_labels, thre
         data[f'{label} campioni'] = mean_real_features[start_idx:end_idx]
         data[f'{label} test'] = test_features[start_idx:end_idx]
     
-    # Creazione del DataFrame
     df = pd.DataFrame(data)
     
-    # Nome del file con data e ora
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     file_name_xlsx = f'report_features_{timestamp}.xlsx'
     file_name_txt = f'report_info_{timestamp}.txt'
     
-    # Salvataggio su file Excel
     df.to_excel(file_name_xlsx, index=False)
     print(f"Comparazione delle features salvata nel file {file_name_xlsx}")
     
-    # Salvataggio su file di testo
     with open(file_name_txt, 'w') as f:
         f.write(f"Media delle similarità: {average_similarity:.2f}\n")
         f.write(f"Il file 'test_audio.wav' è probabilmente un deep fake? {'Sì perchè < di' if is_fake else 'No, perchè > di'} soglia impostata: {threshold*100:.2f}% \n")
@@ -148,6 +136,7 @@ def export_feature_comparison(real_features, test_features, feature_labels, thre
 
 if __name__ == "__main__":
     main()
+
 
 
 
