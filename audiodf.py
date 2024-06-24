@@ -137,9 +137,9 @@ def export_feature_comparison(real_features, test_features, feature_labels, thre
     print(f"Comparazione delle features salvata nel file {file_name_xlsx}")
     
     with open(file_name_txt, 'w') as f:
-        f.write(f"Media delle similarità: {average_similarity:.2f}\n")
+        f.write(f"Media delle similarità: {average_similarity * 100:.2f}%\n")
         f.write(f"Il file 'test_audio.wav' è probabilmente un deep fake? {'Sì perchè < di' if is_fake else 'No, perchè > di'} soglia impostata: {threshold*100:.2f}% \n")
-        f.write(f"Percentuale di verosimiglianza che 'test_audio.wav' sia un deep fake: {verosimiglianza:.2f}% - di {100 - threshold*100:.2f}% (valore soglia)\n")
+        f.write(f"Percentuale di verosimiglianza che 'test_audio.wav' sia un deep fake: {verosimiglianza:.2f}% - {100 - threshold*100:.2f}% (valore soglia)\n")
     print(f"Informazioni salvate nel file {file_name_txt}")
 
 if __name__ == "__main__":
