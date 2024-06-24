@@ -62,7 +62,7 @@ def extract_features(audio_path, max_len=1000):
     return features
 
 def main():
-    default_threshold = 0.70
+    default_threshold = 0.75
     threshold = input(f"Inserisci la soglia di genuinità (default {default_threshold}): ")
     if threshold == '':
         threshold = default_threshold
