@@ -13,10 +13,11 @@ Il programma ha impostata una soglia minima al 75% (0.75), se il file è superio
 
 DESCRIZIONE
 Il programma estrae le seguenti features tramite la libreria LIBROSA:
-chroma_stft, chroma_cqt, chroma_cens, tonnetz, mfcc, rmse, zcr, spectral_centroid, spectral_bandwidth, spectral_contrast, e spectral_rolloff. Inoltre, regola n_fft e hop_length
+chroma_stft, chroma_cqt, chroma_cens, tonnetz, mfcc, rmse, zcr, spectral_centroid, spectral_bandwidth, spectral_contrast, e spectral_rolloff. 
+Inoltre, regola n_fft e hop_length e fa una normalizzazione del volume audio.
 
 Fa un padding di zeri per uniformare le lunghezze dei file
 
 Calcola la media delle caratteristiche estratte dai vari campioni
-Calcola la distanza coseno tra le caratteristiche dei campioni e quelle estratte dal file test_audio.wav e ne calcola la media.
+Calcola la distanza coseno tra la media delle caratteristiche dei campioni e quelle estratte dal file test_audio.wav e ne calcola la distanza.
 Infine fa il confronto e la previsione basata sulla soglia d'accettazione pre-impostata.
