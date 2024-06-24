@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jun 13 08:40:19 2024
+Created on Mon Jun 24 18:17:17 2024
 
 @author: Nanni Bassetti - nannibassetti.com
 """
@@ -20,8 +20,8 @@ def normalize_audio(y):
     max_amplitude = np.max(np.abs(y))
     return y / max_amplitude
 
-def extract_features(audio_path, max_len=1000):
-    y, sr = librosa.load(audio_path, sr=None, res_type='kaiser_fast')
+def extract_features(audio_path, max_len=1024):
+    y, sr = librosa.load(audio_path, sr=None, res_type='kaiser_best')
     y = normalize_audio(y)
     
     n_fft = get_adaptive_n_fft(y)
@@ -41,6 +41,7 @@ def extract_features(audio_path, max_len=1000):
     spectral_bandwidth = librosa.feature.spectral_bandwidth(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length)
     spectral_rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length)
     rmse = librosa.feature.rms(y=y, frame_length=n_fft, hop_length=hop_length)
+    print('*', end='', flush=True)
     
     def pad_features(feature, max_len):
         return librosa.util.fix_length(feature, size=max_len)
@@ -88,15 +89,22 @@ def main():
     
     real_features = np.array(real_features)
     
+    # Calcola la media delle caratteristiche dei campioni
+    mean_real_features = np.mean(real_features, axis=0)
+    
+    # Estrae le caratteristiche del file di test
     test_features = extract_features(test_audio_path).reshape(1, -1)
     
-    similarity_scores = cosine_similarity(real_features, test_features)
-    average_similarity = np.mean(similarity_scores)
+    # Calcola la similarità coseno tra la media dei campioni e le caratteristiche del file di test
+    similarity_scores = cosine_similarity([mean_real_features], test_features)
+    average_similarity = similarity_scores[0, 0]
     
+    # Determina se il file di test è un fake
     is_fake = average_similarity < threshold
     verosimiglianza = (1 - average_similarity) * 100
     
     # Stampa delle informazioni
+    print()
     print(f"Media delle similarità: {average_similarity * 100:.2f}%")
     print(f"Il file 'test_audio.wav' è probabilmente un deep fake? {'Sì perchè < di' if is_fake else 'No, perchè > di'} soglia impostata: {threshold * 100:.2f}% ")
     print(f"Percentuale di verosimiglianza che 'test_audio.wav' sia un deep fake: {verosimiglianza:.2f}% - {100 - threshold * 100:.2f}% (valore soglia)")
