@@ -9,7 +9,7 @@ Funziona con versioni di Python >= 3.8
 4) lanciare il programma:
    python audiodf.py
 
-Il programma ha impostata una soglia minima al 51% (0.51), se il file è superiore a quella soglia allora è considerato genuino, se inferiore è considerato Deep Fake.
+Il programma ha impostata una soglia minima al 75% (0.75), se il file è superiore a quella soglia allora è considerato genuino, se inferiore è considerato Deep Fake.
 
 DESCRIZIONE
 Il programma estrae le seguenti features tramite la libreria LIBROSA:
