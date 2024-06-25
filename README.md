@@ -1,6 +1,6 @@
 # audiodf
 This program can detect if an audio message is a Deep Fake or it is genuine
-## How to Use the Audio Deepfake Detector (English Translation)
+## How to Use the Audio Deepfake Detector 
 
 **Requirements:**
 
@@ -43,6 +43,7 @@ The program will output whether the `test_audio.wav` file is considered genuine 
 - The program can be used to detect deepfakes of different voices and speaking styles. However, its accuracy may vary depending on the quality of the deepfake and the similarity of the voice to the sample audio files.
 
 **ITALIAN** 
+
 Funziona con versioni di Python >= 3.8
 
 1) pip install -r requirements.txt
@@ -53,7 +54,7 @@ Funziona con versioni di Python >= 3.8
 
 Il programma ha impostata una soglia minima al 75% (0.75), se il file è superiore a quella soglia allora è considerato genuino, se inferiore è considerato Deep Fake.
 
-DESCRIZIONE
+**DESCRIZIONE**
 Il programma estrae le seguenti features tramite la libreria LIBROSA:
 chroma_stft, chroma_cqt, chroma_cens, tonnetz, mfcc, rmse, zcr, spectral_centroid, spectral_bandwidth, spectral_contrast, e spectral_rolloff. 
 Inoltre, regola n_fft e hop_length e fa una normalizzazione del volume audio.
