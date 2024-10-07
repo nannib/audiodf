@@ -25,7 +25,7 @@ python audiodf.py
 
 **Description:**
 
-The program extracts the following features using the Librosa library: chroma_stft, chroma_cqt, chroma_cens, tonnetz, mfcc, rmse, zcr, spectral_centroid, spectral_bandwidth, spectral_contrast, and spectral_rolloff. It also adjusts n_fft and hop_length and performs audio volume normalization.
+The program extracts the following features using the Librosa library: chroma_stft, chroma_cqt, chroma_cens, tonnetz, mel, mfcc, rmse, zcr, spectral_centroid, spectral_bandwidth, spectral_contrast, and spectral_rolloff. It also adjusts n_fft and hop_length and performs audio volume normalization.
 
 - Zeros are padded to uniform the lengths of the files.
 - The average of the features extracted from the various samples is calculated.
