@@ -1,3 +1,6 @@
+DISCLAIMER
+This software is an experiment; it is based on an idea and multiple audio tests in order to explore a possible empirical method to measure the verisimilitude between real and cloned voices.
+
 # audiodf
 This program can detect if an audio message is a Deep Fake or it is genuine
 ## How to Use the Audio Deepfake Detector 
@@ -43,6 +46,9 @@ The program will output whether the `test_audio.wav` file is considered genuine 
 - The program can be used to detect deepfakes of different voices and speaking styles. However, its accuracy may vary depending on the quality of the deepfake and the similarity of the voice to the sample audio files.
 
 **ITALIAN** 
+
+DISCLAIMER
+Questo software è un esperimento; è basato su un’idea e da molteplici test audio al fine di esplorare un metodo empirico possibile per misurare la verosimiglianza fra voci reali e clonate.
 
 Funziona con versioni di Python >= 3.8
 
