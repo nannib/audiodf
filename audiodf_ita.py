@@ -14,7 +14,7 @@ from datetime import datetime
 def get_adaptive_n_fft(y):
     length = len(y)
     n_fft = 2**int(np.floor(np.log2(length)))
-    return n_fft
+    return min(n_fft, length)
 
 def normalize_audio(y):
     max_amplitude = np.max(np.abs(y))
