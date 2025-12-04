@@ -1,5 +1,6 @@
 librosa==0.10.2.post1
-numpy==1.26.4
+numpy
 pandas==1.4.2
-scikit_learn==1.2.0
+scikit_learn
 openpyxl==3.1.5
+
