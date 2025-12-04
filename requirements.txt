@@ -1,6 +1,7 @@
 librosa==0.10.2.post1
 numpy
-pandas==1.4.2
+pandas
 scikit_learn
 openpyxl==3.1.5
+
 
